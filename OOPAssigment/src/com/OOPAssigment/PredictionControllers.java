@@ -29,7 +29,7 @@ public class PredictionControllers {
         data.addRows(new dataRow("Night", "Stormy", "Stable", "Available", 7, 6));
         data.addRows(new dataRow("Night", "Stormy", "Stable", "Unavailable", 6, 6));
         data.addRows(new dataRow("Night", "Stormy", "Unstable", "Available", 6, 6));
-        data.addRows(new dataRow("Night", "Stormy", "Unstable", "Unavailable", 7, 5));
+        data.addRows(new dataRow("Night", "Stormy", "Unstable", "Unavailable", 8, 5));
 
 
     }
