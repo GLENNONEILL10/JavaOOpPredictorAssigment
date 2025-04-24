@@ -1,11 +1,11 @@
 package com.OOPAssigment;
 
-public class predictionContoller {
+public class PredictionControllers {
 
     private dataset data = new dataset();
     private Prediction predictor;
 
-    public predictionContoller(){
+    public PredictionControllers(){
 
         loadData();
 
@@ -29,7 +29,7 @@ public class predictionContoller {
         data.addRows(new dataRow("Night", "Stormy", "Stable", "Available", 7, 6));
         data.addRows(new dataRow("Night", "Stormy", "Stable", "Unavailable", 6, 6));
         data.addRows(new dataRow("Night", "Stormy", "Unstable", "Available", 6, 6));
-        data.addRows(new dataRow("Night", "Stormy", "Unstable", "Unavailable", 5, 7));
+        data.addRows(new dataRow("Night", "Stormy", "Unstable", "Unavailable", 7, 5));
 
 
     }

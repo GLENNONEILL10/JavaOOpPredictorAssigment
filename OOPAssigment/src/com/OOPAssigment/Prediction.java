@@ -11,7 +11,6 @@ public class Prediction{
 
     public String predict(String timeOfDay,String weatherCondition,String powerGridStatus,String backupGenerator){
 
-
         int totalOn = 0;
         int totalOff = 0;
 
@@ -36,12 +35,16 @@ public class Prediction{
             return "Power Is On";
 
         }
-        else{
+
+        else if (totalOn < totalOff) {
 
             return "Power Is Off";
+            
+        }
+        else{
+
+            return "0";
         }
     }
     
 }
-
-
