@@ -12,6 +12,15 @@ public class PredictionControllers {
         predictor = new Prediction(data);
     }
 
+    public void setData(dataset data) {
+    	
+    	this.data = data;
+    	this.predictor = new Prediction(data);
+    
+    }
+    	
+    
+
     public void loadData(){
 
         data.addRows(new dataRow("Day","Clear","Stable","Available",5,8));

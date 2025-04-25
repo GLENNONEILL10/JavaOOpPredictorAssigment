@@ -2,84 +2,104 @@ package com.OOPAssigment;
 
 import java.awt.*;
 import javax.swing.*;
+import java.io.*;
 
 public class GUI extends JFrame{
 	
-	public GUI(){
-		
-		JFrame frame = new JFrame("PowerIsOut");
+	public GUI() {
 
-		PredictionControllers controller = new PredictionControllers();
-		
-	
-		frame.setSize(350,250);
-		
-		frame.setLayout(new GridLayout(6,2,10,10));
-		
-		String[] timeOfDay= {"Day","Night"};
-		String[] weatherCondition = {"Clear","Stormy"};
-		String[] powerGridStatus = {"Stable","Unstable"};
-		String[] backupGenerator = {"Available","Unavailable"};
+        JFrame frame = new JFrame("PowerIsOut");
 
-		
-		//dropdown menus
-		JComboBox<String> timeOfDayDropdown = new JComboBox<>(timeOfDay);
-		JComboBox<String> weatherConditionDropdown = new JComboBox<>(weatherCondition);
-		JComboBox<String> powerGridStatusDropdown = new JComboBox<>(powerGridStatus);
-		JComboBox<String> backupGeneratorDropdown = new JComboBox<>(backupGenerator);
-		
-		JButton submitButton = new JButton("Enter Prediction"); 
+        // Create the controller and trainer
+        PredictionControllers controller = new PredictionControllers();
+        TrainModel train = new TrainModel();
 
-		JLabel resultLabel;
-		resultLabel = new JLabel("Prediction Will Appear here");
-		
-		//when button is clicked
-		submitButton.addActionListener(e ->{
-			
-			
-			//information is shown to user 
-			String info = "Time Of Day:"+timeOfDayDropdown.getSelectedItem() +
-					      "\nWeather Condition:"+weatherConditionDropdown.getSelectedItem() +
-					      "\nPower Grid Status:"+powerGridStatusDropdown.getSelectedItem() +
-					      "\nBackup Generator:"+backupGeneratorDropdown.getSelectedItem();
-			
-			JOptionPane.showMessageDialog(frame,info);
-			
-			String time = (String) timeOfDayDropdown.getSelectedItem();
-			String weather = (String) weatherConditionDropdown.getSelectedItem();
-			String powerGrid = (String) powerGridStatusDropdown.getSelectedItem();
-			String generator = (String) backupGeneratorDropdown.getSelectedItem();
+        // Set GUI size and layout
+        frame.setSize(400, 300);
+        frame.setLayout(new GridLayout(8, 2, 10, 10));
 
-			String result = controller.predict(time, weather, powerGrid, generator);
+        // Dropdown options
+        String[] timeOfDay = {"Day", "Night"};
+        String[] weatherCondition = {"Clear", "Stormy"};
+        String[] powerGridStatus = {"Stable", "Unstable"};
+        String[] backupGenerator = {"Available", "NotAvailable"};
 
-			resultLabel.setText("Prediction:" + result);
+        // Dropdown components
+        JComboBox<String> timeOfDayDropdown = new JComboBox<>(timeOfDay);
+        JComboBox<String> weatherConditionDropdown = new JComboBox<>(weatherCondition);
+        JComboBox<String> powerGridStatusDropdown = new JComboBox<>(powerGridStatus);
+        JComboBox<String> backupGeneratorDropdown = new JComboBox<>(backupGenerator);
 
-			
-		});
-		
-		//adds the labels and dropdown menus
-		frame.add(new JLabel("Time Of Day:"));
-		frame.add(timeOfDayDropdown);
-		
-		frame.add(new JLabel("Weather Condition:"));
-		frame.add(weatherConditionDropdown);
-		
-		frame.add(new JLabel("Power Grid Status:"));
-		frame.add(powerGridStatusDropdown);
-		
-		frame.add(new JLabel("Backup Generator:"));
-		frame.add(backupGeneratorDropdown);
-		
-		//adds the button
-		frame.add(new JLabel(""));//adds space
-		frame.add(submitButton);
-		
-		frame.add(resultLabel);
-		
-		//makes window visible
-		frame.setVisible(true);
-			
-	}
+        // Buttons and labels
+        JButton trainModel = new JButton("Train Model");
+        JButton submitButton = new JButton("Enter Prediction");
+        JLabel trainingResult = new JLabel("Training Result");
+        JLabel resultLabel = new JLabel("Prediction Will Appear Here");
 
+ 
+        trainModel.addActionListener(e -> {
+            try {
+              
+                Dataset newData = train.trainModel("src/PowerIsOut_Dataset.csv");
+                
+                controller.setData(newData);
+                trainingResult.setText("Training Complete: " + newData.getRows().size() + " entries learned.");
+                
+                for (DataRow row : newData.getRows()) {
+                    System.out.println("Row: " + row.getTimeOfDay() + "," +
+                                       row.getWeatherCondition() + "," +
+                                       row.getPowerGridStatus() + "," +
+                                       row.getBackupGenerator() +
+                                       " | On: " + row.getPowerIsOn() + ", Off: " + row.getPowerIsOff());
+                }               
+                
+            }
+            catch (FileNotFoundException ex) {
+                trainingResult.setText("File not found!");
+                ex.printStackTrace();
+            } 
+            catch (Exception ex) {
+                trainingResult.setText("Error: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+
+        // Prediction Button
+        submitButton.addActionListener(e -> {
+            String time = (String) timeOfDayDropdown.getSelectedItem();
+            String weather = (String) weatherConditionDropdown.getSelectedItem();
+            String powerGrid = (String) powerGridStatusDropdown.getSelectedItem();
+            String generator = (String) backupGeneratorDropdown.getSelectedItem();
+
+            String result = controller.predict(time, weather, powerGrid, generator);
+            resultLabel.setText("Prediction: " + result);
+
+         
+            String info = "Time Of Day: " + time +
+                    "\nWeather: " + weather +
+                    "\nPower Grid: " + powerGrid +
+                    "\nBackup Generator: " + generator;
+            JOptionPane.showMessageDialog(frame, info);
+        });
+
+        // Add components to GUI
+        frame.add(new JLabel("Time Of Day:"));
+        frame.add(timeOfDayDropdown);
+        frame.add(new JLabel("Weather Condition:"));
+        frame.add(weatherConditionDropdown);
+        frame.add(new JLabel("Power Grid Status:"));
+        frame.add(powerGridStatusDropdown);
+        frame.add(new JLabel("Backup Generator:"));
+        frame.add(backupGeneratorDropdown);
+        frame.add(trainModel);
+        frame.add(trainingResult);
+        frame.add(submitButton);
+        frame.add(resultLabel);
+    
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
 
 }
+
