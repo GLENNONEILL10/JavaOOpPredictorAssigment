@@ -25,33 +25,37 @@ public class Prediction {
         //for each row object get the rows from the dataset
         for(dataRow row : data.getRows()){
         	
-        	//if 
+        	//if whats in row is equal to what the user selects in gui
             if (row.getTimeOfDay().equalsIgnoreCase(timeOfDay) && row.getWeatherCondition().equalsIgnoreCase(weatherCondition)
                 && row.getPowerGridStatus().equalsIgnoreCase(powerGridStatus) 
                 && row.getBackupGenerator().equalsIgnoreCase(backupGenerator)){
 
+                    //gets total number of powersIsOn
                     totalOn += row.getPowerIsOn();
+
+                    //gets total number of powerIsOff
                     totalOff += row.getPowerIsOff(); 
-                    
-                    
+                
             }
         }
 
+        //if totalOn and totalOff = 0
         if (totalOn == 0 && totalOff == 0) {
 
             return "Error";
             
         }
+        //or if totalOn is greater than totalOff
         else if(totalOn > totalOff){
 
             return "Power Is On";
 
         }
         
+        //or else totalOn is less than totalOff
         else if(totalOn < totalOff){
         	
         	return "Power Is Off";
-        	
         	
         }
         
@@ -63,11 +67,13 @@ public class Prediction {
         	//gets random number between 0 and 1
         	int randomChoice = rand.nextInt(2);
         	
-        	if(randomChoice == 0){
+            //if random number is 1
+        	if(randomChoice == 1){
         		
         		return "Power Is On";
         		
         	}
+            //or else random number = 0
         	else {
         		
         		return "Power Is Off";

@@ -22,6 +22,8 @@ public class dataRow {
 
 	}
 
+	//getters and setters for attributes
+
 	public String getTimeOfDay(){
 
 		return timeOfDay;

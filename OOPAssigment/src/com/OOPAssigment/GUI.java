@@ -73,10 +73,12 @@ public class GUI extends JFrame{
             String powerGrid = (String) powerGridStatusDropdown.getSelectedItem();
             String generator = (String) backupGeneratorDropdown.getSelectedItem();
 
+            //stores prediction result
             String result = controller.predict(time, weather, powerGrid, generator);
             resultLabel.setText("Prediction: " + result);
 
-         
+            
+            //information that pops up for user when they select the options the want
             String info = "Time Of Day: " + time +
                     "\nWeather: " + weather +
                     "\nPower Grid: " + powerGrid +
@@ -84,8 +86,10 @@ public class GUI extends JFrame{
             JOptionPane.showMessageDialog(frame, info);
         });
         
+        //add more data button
         addData.addActionListener(e ->{
-        	
+            
+            //dropdown options
         	String time = (String) timeOfDayDropdown.getSelectedItem();
             String weather = (String) weatherConditionDropdown.getSelectedItem();
             String powerGrid = (String) powerGridStatusDropdown.getSelectedItem();
@@ -94,25 +98,30 @@ public class GUI extends JFrame{
             
             String[] options = {"Power is On","Power is Off"};
             
+            //option menu that asks user to select power is on/off pops up when user select the attribute they want
             int labelChoice = JOptionPane.showOptionDialog(frame,
             		
             		"What is the label for this entry","Label Input",
             		JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
             		null, options, options[0]);
             
+            //creates new dataRow object
             dataRow newRow = new dataRow(time,weather,powerGrid,generator, 0, 0);
             
+            //places the new data into dataset
             newRow.setTimeOfDay(time);
             newRow.setWeatherCondition(weather);
             newRow.setPowerGridStatus(powerGrid);
             newRow.setBackupGenerator(generator);
             
+            //if user selects power is on
             if(labelChoice == JOptionPane.YES_OPTION){
             	
             	newRow.setPowerIsOn(1);
             	newRow.setPowerIsOff(0);
             	
             }
+            //if user selects power is off
             else if(labelChoice == JOptionPane.NO_OPTION){
             	
             	newRow.setPowerIsOn(0);
@@ -125,15 +134,16 @@ public class GUI extends JFrame{
             		return; 
         		
             }
-            
+            //adds the new data to arraylist
             newData.getRows().add(newRow);
             
+
+            //adds new data to data controller
             controller.setData(newData);
             
+            //is displayed after user selcts option choice
             JOptionPane.showMessageDialog(frame, "New row added and classifier retrained!");
             trainingResult.setText("Training Updated: " + newData.getRows().size() + " entries now.");
-            
-               
         
         });
 

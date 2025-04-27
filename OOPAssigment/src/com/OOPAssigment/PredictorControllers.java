@@ -12,6 +12,7 @@ public class PredictorControllers {
         predictor = new Prediction(data);
     }
 
+    //sets the data
     public void setData(dataset data) {
     	
     	this.data = data;
@@ -20,7 +21,7 @@ public class PredictorControllers {
     }
     	
     
-
+    //hard coded in the data for part 1 of assignment
     public void loadData(){
 
         data.addRows(new dataRow("Day","Clear","Stable","Available",5,8));
@@ -43,6 +44,7 @@ public class PredictorControllers {
 
     }
 
+    //function that returns the result of the prediction
     public String predict(String timeOfDay,String weatherCondition,String powerGridStatus,String backupGenerator){
 
         return predictor.predict(timeOfDay, weatherCondition, powerGridStatus, backupGenerator);
