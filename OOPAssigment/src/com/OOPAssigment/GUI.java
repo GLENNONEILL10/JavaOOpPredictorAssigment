@@ -45,21 +45,28 @@ public class GUI extends JFrame{
         JButton addData = new JButton("Add More Data");
         JLabel addDataLabel = new JLabel("Add new Row & ReTrain");
 
- 
+        //train model button
         trainModel.addActionListener(e -> {
         	
+            
             try {
-              
+                
+                //gets the data file and stores in datset object
                 dataset trainData = train.trainModel("src/PowerIsOut_Dataset.csv");
                 
+                //places the imported data into set data function
                 controller.setData(trainData);
+
+                //message for user
                 trainingResult.setText("Training Complete: " + trainData.getRows().size() + " entries learned.");
                               
             }
+            //if file is not found
             catch (FileNotFoundException ex) {
                 trainingResult.setText("File not found!");
                 ex.printStackTrace();
             } 
+            //if there is an error with file
             catch (Exception ex) {
                 trainingResult.setText("Error: " + ex.getMessage());
                 ex.printStackTrace();
