@@ -1,11 +1,11 @@
 package com.OOPAssigment;
 
-public class PredictionControllers {
+public class PredictorControllers {
 
     private dataset data = new dataset();
     private Prediction predictor;
 
-    public PredictionControllers(){
+    public PredictorControllers(){
 
         loadData();
 

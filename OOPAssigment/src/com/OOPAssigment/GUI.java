@@ -1,8 +1,8 @@
 package com.OOPAssigment;
 
 import java.awt.*;
-import javax.swing.*;
 import java.io.*;
+import javax.swing.*;
 
 public class GUI extends JFrame{
 	
@@ -11,12 +11,17 @@ public class GUI extends JFrame{
         JFrame frame = new JFrame("PowerIsOut");
 
         // Create the controller and trainer
-        PredictionControllers controller = new PredictionControllers();
+        PredictorControllers controller = new PredictorControllers();
         TrainModel train = new TrainModel();
-
+        dataset newData = new dataset();
+        
         // Set GUI size and layout
         frame.setSize(400, 300);
-        frame.setLayout(new GridLayout(8, 2, 10, 10));
+        frame.setLayout(new BorderLayout());
+        
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new GridLayout(8,2,20,20));
+        
 
         // Dropdown options
         String[] timeOfDay = {"Day", "Night"};
@@ -32,27 +37,24 @@ public class GUI extends JFrame{
 
         // Buttons and labels
         JButton trainModel = new JButton("Train Model");
-        JButton submitButton = new JButton("Enter Prediction");
         JLabel trainingResult = new JLabel("Training Result");
+        
+        JButton submitButton = new JButton("Enter Prediction");
         JLabel resultLabel = new JLabel("Prediction Will Appear Here");
+        
+        JButton addData = new JButton("Add More Data");
+        JLabel addDataLabel = new JLabel("Add new Row & ReTrain");
 
  
         trainModel.addActionListener(e -> {
+        	
             try {
               
-                Dataset newData = train.trainModel("src/PowerIsOut_Dataset.csv");
+                dataset trainData = train.trainModel("src/PowerIsOut_Dataset.csv");
                 
-                controller.setData(newData);
-                trainingResult.setText("Training Complete: " + newData.getRows().size() + " entries learned.");
-                
-                for (DataRow row : newData.getRows()) {
-                    System.out.println("Row: " + row.getTimeOfDay() + "," +
-                                       row.getWeatherCondition() + "," +
-                                       row.getPowerGridStatus() + "," +
-                                       row.getBackupGenerator() +
-                                       " | On: " + row.getPowerIsOn() + ", Off: " + row.getPowerIsOff());
-                }               
-                
+                controller.setData(trainData);
+                trainingResult.setText("Training Complete: " + trainData.getRows().size() + " entries learned.");
+                              
             }
             catch (FileNotFoundException ex) {
                 trainingResult.setText("File not found!");
@@ -81,25 +83,85 @@ public class GUI extends JFrame{
                     "\nBackup Generator: " + generator;
             JOptionPane.showMessageDialog(frame, info);
         });
+        
+        addData.addActionListener(e ->{
+        	
+        	String time = (String) timeOfDayDropdown.getSelectedItem();
+            String weather = (String) weatherConditionDropdown.getSelectedItem();
+            String powerGrid = (String) powerGridStatusDropdown.getSelectedItem();
+            String generator = (String) backupGeneratorDropdown.getSelectedItem();
+            
+            
+            String[] options = {"Power is On","Power is Off"};
+            
+            int labelChoice = JOptionPane.showOptionDialog(frame,
+            		
+            		"What is the label for this entry","Label Input",
+            		JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+            		null, options, options[0]);
+            
+            dataRow newRow = new dataRow(time,weather,powerGrid,generator, 0, 0);
+            
+            newRow.setTimeOfDay(time);
+            newRow.setWeatherCondition(weather);
+            newRow.setPowerGridStatus(powerGrid);
+            newRow.setBackupGenerator(generator);
+            
+            if(labelChoice == JOptionPane.YES_OPTION){
+            	
+            	newRow.setPowerIsOn(1);
+            	newRow.setPowerIsOff(0);
+            	
+            }
+            else if(labelChoice == JOptionPane.NO_OPTION){
+            	
+            	newRow.setPowerIsOn(0);
+            	newRow.setPowerIsOff(1);
+            	
+            }
+            
+            else if (labelChoice == JOptionPane.CLOSED_OPTION){
+            	
+            		return; 
+        		
+            }
+            
+            newData.getRows().add(newRow);
+            
+            controller.setData(newData);
+            
+            JOptionPane.showMessageDialog(frame, "New row added and classifier retrained!");
+            trainingResult.setText("Training Updated: " + newData.getRows().size() + " entries now.");
+            
+               
+        
+        });
 
         // Add components to GUI
-        frame.add(new JLabel("Time Of Day:"));
-        frame.add(timeOfDayDropdown);
-        frame.add(new JLabel("Weather Condition:"));
-        frame.add(weatherConditionDropdown);
-        frame.add(new JLabel("Power Grid Status:"));
-        frame.add(powerGridStatusDropdown);
-        frame.add(new JLabel("Backup Generator:"));
-        frame.add(backupGeneratorDropdown);
-        frame.add(trainModel);
-        frame.add(trainingResult);
-        frame.add(submitButton);
-        frame.add(resultLabel);
+        leftPanel.add(new JLabel("Time Of Day:"));
+        leftPanel.add(timeOfDayDropdown);
+        leftPanel.add(new JLabel("Weather Condition:"));
+        leftPanel.add(weatherConditionDropdown);
+        leftPanel.add(new JLabel("Power Grid Status:"));
+        leftPanel.add(powerGridStatusDropdown);
+        leftPanel.add(new JLabel("Backup Generator:"));
+        leftPanel.add(backupGeneratorDropdown);
+        
+        leftPanel.add(addData);
+        leftPanel.add(addDataLabel);
+        
+        leftPanel.add(trainModel);
+        leftPanel.add(trainingResult);
+        
+        
+        leftPanel.add(submitButton);
+        leftPanel.add(resultLabel);
+        
+        frame.add(leftPanel,BorderLayout.CENTER);
+         
     
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 
 }
-
