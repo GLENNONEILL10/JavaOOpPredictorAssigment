@@ -1,5 +1,7 @@
 # JavaPredictorAssignment
 
+Everything is in the OOPAssigment folder 
+
 Frequency Table
 TimeOfDay	WeatherCondition	PowerGridStatus	BackupGenerator	PowerIsOut_Yes	PowerIsOut_No
 Day	        Clear	            Stable	        Available	        5	              8
