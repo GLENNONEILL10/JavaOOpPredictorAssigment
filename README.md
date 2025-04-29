@@ -1,6 +1,6 @@
 # JavaPredictorAssignment
 
-Everything is in the OOPAssigment folder 
+Everything is in the OOPAssigment folder NOT in the PowerIsOutAssignment Folder i couldnt figure out how to remove it
 
 Frequency Table
 TimeOfDay	WeatherCondition	PowerGridStatus	BackupGenerator	PowerIsOut_Yes	PowerIsOut_No
