@@ -23,7 +23,7 @@ Night      	Stormy	          Unstable	      NotAvailable	    8	              5
 ![image](https://github.com/user-attachments/assets/2c78e02c-1f56-4c37-adcb-2af87a24638b)
 
 
-Got the class structure for classes 1-6 from chatgpt 
+
 
 Class 1 - Control: The class with main method. Initialises Gui class object to run the gui
 
